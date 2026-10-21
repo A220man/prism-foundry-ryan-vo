@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "current_feature": "core-skeleton",
+  "features": [
+    {
+      "id": "core-skeleton",
+      "title": "Core FastAPI/React skeleton with health check",
+      "status": "done",
+      "acceptance": [
+        "FastAPI backend starts and responds to /health",
+        "React frontend builds and loads",
+        "Docker compose brings up backend + frontend",
+        "Basic project structure matches owned-app contract"
+      ],
+      "implementation": [
+        "backend/app/main.py",
+        "backend/app/api/health.py",
+        "backend/app/api/market_data.py",
+        "backend/app/api/predictions.py",
+        "backend/app/api/finetune.py",
+        "backend/app/api/auth.py",
+        "backend/app/core/config.py",
+        "backend/app/core/database.py",
+        "backend/app/models/__init__.py",
+        "backend/requirements.txt",
+        "backend/pyproject.toml",
+        "backend/Dockerfile",
+        "frontend/src/main.tsx",
+        "frontend/src/App.tsx",
+        "frontend/src/pages/Dashboard.tsx",
+        "frontend/src/pages/MarketData.tsx",
+        "frontend/src/pages/Predictions.tsx",
+        "frontend/src/pages/FineTune.tsx",
+        "frontend/src/pages/Evaluation.tsx",
+        "frontend/src/api/client.ts",
+        "frontend/src/components/Layout.tsx",
+        "frontend/src/components/Navbar.tsx",
+        "frontend/src/components/LoadingSpinner.tsx",
+        "frontend/src/components/Toast.tsx",
+        "frontend/src/hooks/useAppStore.ts",
+        "frontend/src/index.css",
+        "frontend/package.json",
+        "frontend/tsconfig.json",
+        "frontend/vite.config.ts",
+        "frontend/Dockerfile",
+        "compose.yaml",
+        ".github/workflows/ci.yml",
+        "pyproject.toml"
+      ],
+      "tests": [
+        "backend/tests/test_health.py",
+        "backend/tests/test_market_data.py",
+        "backend/tests/test_predictions.py",
+        "backend/tests/test_finetune.py",
+        "backend/tests/test_auth.py",
+        "frontend/src/pages/Dashboard.test.tsx",
+        "frontend/src/pages/MarketData.test.tsx",
+        "frontend/src/pages/Predictions.test.tsx"
+      ]
+    },
+    {
+      "id": "market-data-ingestion",
+      "title": "Market data ingestion and storage",
+      "status": "planned",
+      "acceptance": [
+        "API to fetch/store OHLCV data from configurable sources",
+        "SQLite persistence with parameterized queries",
+        "Pagination and filtering on historical data endpoints"
+      ],
+      "implementation": [],
+      "tests": []
+    },
+    {
+      "id": "tokenizer-service",
+      "title": "Kronos tokenizer service (offline core)",
+      "status": "planned",
+      "acceptance": [
+        "Deterministic tokenization of price sequences",
+        "Works without LLM API keys",
+        "Unit tests for boundary cases"
+      ],
+      "implementation": [],
+      "tests": []
+    },
+    {
+      "id": "prediction-engine",
+      "title": "Prediction engine with evaluation metrics",
+      "status": "planned",
+      "acceptance": [
+        "Generate predictions from historical context",
+        "Compute MAE, RMSE, MAPE, Correlation",
+        "Evaluation workflow with reproducible results"
+      ],
+      "implementation": [],
+      "tests": []
+    },
+    {
+      "id": "finetune-workflow",
+      "title": "Fine-tuning workflow for custom symbols",
+      "status": "planned",
+      "acceptance": [
+        "Configure fine-tuning runs with custom data",
+        "Track training progress and metrics",
+        "Export adapted model artifacts"
+      ],
+      "implementation": [],
+      "tests": []
+    },
+    {
+      "id": "oidc-auth",
+      "title": "OIDC authentication with Keycloak",
+      "status": "planned",
+      "acceptance": [
+        "Authorization code flow with PKCE",
+        "Backend session cookies + CSRF protection",
+        "Role-based access (viewer/operator/admin)"
+      ],
+      "implementation": [],
+      "tests": []
+    },
+    {
+      "id": "llm-adapters",
+      "title": "LLM provider adapters (OpenAI/Anthropic/Gemini/Ollama)",
+      "status": "planned",
+      "acceptance": [
+        "Configurable provider/model/endpoint",
+        "Bounded timeouts, redacted errors",
+        "Keys only server-side"
+      ],
+      "implementation": [],
+      "tests": []
+    }
+  ]
+}

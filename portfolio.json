@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "name": "prism-foundry-ryan-vo",
+  "owner": "A220man",
+  "email": "ryandtvo@gmail.com",
+  "domain": "AI/ML developer tools",
+  "summary": "Work in progress: prism-foundry-ryan-vo",
+  "workflows": [
+    "Market data ingestion and OHLCV management with pagination and filtering",
+    "Kronos tokenizer for deterministic price sequence encoding",
+    "Multi-step prediction generation with MAE/RMSE/MAPE/Correlation evaluation",
+    "Fine-tuning workflow for custom symbol adaptation with progress tracking",
+    "Model evaluation dashboard with predicted vs actual visualization"
+  ],
+  "auth": "oidc-keycloak-saml-broker",
+  "llm_providers": [
+    "openai-compatible",
+    "anthropic",
+    "gemini",
+    "ollama"
+  ],
+  "status": "work-in-progress"
+}
