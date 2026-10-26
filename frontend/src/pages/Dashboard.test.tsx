@@ -3,18 +3,18 @@ import { render, screen, waitFor } from '@testing-library/react'
 import { Dashboard } from '../pages/Dashboard'
 import type { AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 
-vi.mock('../api/client', () => {
-  const mockCheck = vi.fn<() => Promise<AxiosResponse<{ status: string; app: string; version: string; environment: string }>>>()
-  const mockDbCheck = vi.fn<() => Promise<AxiosResponse<{ status: string; database: string; error?: string }>>>()
-  return {
-    healthApi: {
-      check: mockCheck,
-      dbCheck: mockDbCheck,
-    },
-  }
-})
+const { mockCheck, mockDbCheck } = vi.hoisted(() => ({
+  mockCheck: vi.fn<() => Promise<AxiosResponse<{ status: string; app: string; version: string; environment: string }>>>(),
+  mockDbCheck: vi.fn<() => Promise<AxiosResponse<{ status: string; database: string; error?: string }>>>(),
+}))
 
-import { healthApi } from '../api/client'
+vi.mock('../api/client', () => ({
+  healthApi: {
+    check: mockCheck,
+    dbCheck: mockDbCheck,
+  },
+}))
+
 
 function makeResponse<T>(data: T): AxiosResponse<T> {
   return {
@@ -32,8 +32,8 @@ describe('Dashboard', () => {
   })
 
   it('renders dashboard title', async () => {
-    healthApi.check.mockResolvedValue(makeResponse({ status: 'healthy', app: 'prism-foundry', version: '1.0.0', environment: 'development' }))
-    healthApi.dbCheck.mockResolvedValue(makeResponse({ status: 'healthy', database: 'connected' }))
+    mockCheck.mockResolvedValue(makeResponse({ status: 'healthy', app: 'prism-foundry', version: '1.0.0', environment: 'development' }))
+    mockDbCheck.mockResolvedValue(makeResponse({ status: 'healthy', database: 'connected' }))
 
     render(<Dashboard />)
 
@@ -43,8 +43,8 @@ describe('Dashboard', () => {
   })
 
   it('shows healthy status when API returns healthy', async () => {
-    healthApi.check.mockResolvedValue(makeResponse({ status: 'healthy', app: 'prism-foundry', version: '1.0.0', environment: 'development' }))
-    healthApi.dbCheck.mockResolvedValue(makeResponse({ status: 'healthy', database: 'connected' }))
+    mockCheck.mockResolvedValue(makeResponse({ status: 'healthy', app: 'prism-foundry', version: '1.0.0', environment: 'development' }))
+    mockDbCheck.mockResolvedValue(makeResponse({ status: 'healthy', database: 'connected' }))
 
     render(<Dashboard />)
 
@@ -55,8 +55,8 @@ describe('Dashboard', () => {
   })
 
   it('shows workflow cards', async () => {
-    healthApi.check.mockResolvedValue(makeResponse({ status: 'healthy', app: 'prism-foundry', version: '1.0.0', environment: 'development' }))
-    healthApi.dbCheck.mockResolvedValue(makeResponse({ status: 'healthy', database: 'connected' }))
+    mockCheck.mockResolvedValue(makeResponse({ status: 'healthy', app: 'prism-foundry', version: '1.0.0', environment: 'development' }))
+    mockDbCheck.mockResolvedValue(makeResponse({ status: 'healthy', database: 'connected' }))
 
     render(<Dashboard />)
 

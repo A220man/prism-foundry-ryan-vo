@@ -4,22 +4,23 @@ import { MarketDataPage } from '../pages/MarketData'
 import type { AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 import type { MarketDataListResponse } from '../api/client'
 
-vi.mock('../api/client', () => {
-  const mockList = vi.fn<(params?: { symbol?: string; start_date?: string; end_date?: string; page?: number; page_size?: number }) => Promise<AxiosResponse<MarketDataListResponse>>>()
-  const mockGetSymbols = vi.fn<() => Promise<AxiosResponse<string[]>>>()
-  return {
-    marketDataApi: {
-      list: mockList,
-      getSymbols: mockGetSymbols,
-      create: vi.fn(),
-    },
-    useAppStore: () => ({
-      addToast: vi.fn(),
-    }),
-  }
-})
+const { mockList, mockGetSymbols, mockCreate } = vi.hoisted(() => ({
+  mockList: vi.fn<(params?: { symbol?: string; start_date?: string; end_date?: string; page?: number; page_size?: number }) => Promise<AxiosResponse<MarketDataListResponse>>>(),
+  mockGetSymbols: vi.fn<() => Promise<AxiosResponse<string[]>>>(),
+  mockCreate: vi.fn(),
+}))
 
-import { marketDataApi } from '../api/client'
+vi.mock('../api/client', () => ({
+  marketDataApi: {
+    list: mockList,
+    getSymbols: mockGetSymbols,
+    create: mockCreate,
+  },
+  useAppStore: () => ({
+    addToast: vi.fn(),
+  }),
+}))
+
 
 function makeResponse<T>(data: T): AxiosResponse<T> {
   return {
@@ -37,8 +38,8 @@ describe('MarketDataPage', () => {
   })
 
   it('renders market data title', async () => {
-    marketDataApi.list.mockResolvedValue(makeResponse({ items: [], total: 0, page: 1, page_size: 50, total_pages: 0 }))
-    marketDataApi.getSymbols.mockResolvedValue(makeResponse([]))
+    mockList.mockResolvedValue(makeResponse({ items: [], total: 0, page: 1, page_size: 50, total_pages: 0 }))
+    mockGetSymbols.mockResolvedValue(makeResponse([]))
 
     render(<MarketDataPage />)
 
@@ -48,8 +49,8 @@ describe('MarketDataPage', () => {
   })
 
   it('shows empty state when no data', async () => {
-    marketDataApi.list.mockResolvedValue(makeResponse({ items: [], total: 0, page: 1, page_size: 50, total_pages: 0 }))
-    marketDataApi.getSymbols.mockResolvedValue(makeResponse([]))
+    mockList.mockResolvedValue(makeResponse({ items: [], total: 0, page: 1, page_size: 50, total_pages: 0 }))
+    mockGetSymbols.mockResolvedValue(makeResponse([]))
 
     render(<MarketDataPage />)
 
@@ -59,8 +60,8 @@ describe('MarketDataPage', () => {
   })
 
   it('opens modal when add button clicked', async () => {
-    marketDataApi.list.mockResolvedValue(makeResponse({ items: [], total: 0, page: 1, page_size: 50, total_pages: 0 }))
-    marketDataApi.getSymbols.mockResolvedValue(makeResponse([]))
+    mockList.mockResolvedValue(makeResponse({ items: [], total: 0, page: 1, page_size: 50, total_pages: 0 }))
+    mockGetSymbols.mockResolvedValue(makeResponse([]))
 
     render(<MarketDataPage />)
 
