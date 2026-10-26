@@ -4,20 +4,21 @@ import { PredictionsPage } from '../pages/Predictions'
 import type { AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 import type { PredictionListResponse } from '../api/client'
 
-vi.mock('../api/client', () => {
-  const mockList = vi.fn<(params?: { symbol?: string; page?: number; page_size?: number }) => Promise<AxiosResponse<PredictionListResponse>>>()
-  return {
-    predictionsApi: {
-      list: mockList,
-      evaluate: vi.fn(),
-    },
-    useAppStore: () => ({
-      addToast: vi.fn(),
-    }),
-  }
-})
+const { mockList, mockEvaluate } = vi.hoisted(() => ({
+  mockList: vi.fn<(params?: { symbol?: string; page?: number; page_size?: number }) => Promise<AxiosResponse<PredictionListResponse>>>(),
+  mockEvaluate: vi.fn(),
+}))
 
-import { predictionsApi } from '../api/client'
+vi.mock('../api/client', () => ({
+  predictionsApi: {
+    list: mockList,
+    evaluate: mockEvaluate,
+  },
+  useAppStore: () => ({
+    addToast: vi.fn(),
+  }),
+}))
+
 
 function makeResponse<T>(data: T): AxiosResponse<T> {
   return {
@@ -35,7 +36,7 @@ describe('PredictionsPage', () => {
   })
 
   it('renders predictions title', async () => {
-    predictionsApi.list.mockResolvedValue(makeResponse({ items: [], total: 0, page: 1, page_size: 50, total_pages: 0 }))
+    mockList.mockResolvedValue(makeResponse({ items: [], total: 0, page: 1, page_size: 50, total_pages: 0 }))
 
     render(<PredictionsPage />)
 
@@ -45,7 +46,7 @@ describe('PredictionsPage', () => {
   })
 
   it('shows empty state when no predictions', async () => {
-    predictionsApi.list.mockResolvedValue(makeResponse({ items: [], total: 0, page: 1, page_size: 50, total_pages: 0 }))
+    mockList.mockResolvedValue(makeResponse({ items: [], total: 0, page: 1, page_size: 50, total_pages: 0 }))
 
     render(<PredictionsPage />)
 
@@ -55,7 +56,7 @@ describe('PredictionsPage', () => {
   })
 
   it('opens modal when create button clicked', async () => {
-    predictionsApi.list.mockResolvedValue(makeResponse({ items: [], total: 0, page: 1, page_size: 50, total_pages: 0 }))
+    mockList.mockResolvedValue(makeResponse({ items: [], total: 0, page: 1, page_size: 50, total_pages: 0 }))
 
     render(<PredictionsPage />)
 
