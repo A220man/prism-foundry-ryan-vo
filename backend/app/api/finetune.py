@@ -6,7 +6,7 @@ from datetime import datetime
 import json
 from app.core.database import get_session
 from app.models import FineTuneRun
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 router = APIRouter()
 
@@ -28,8 +28,7 @@ class FineTuneRunResponse(BaseModel):
     completed_at: Optional[datetime]
     created_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class FineTuneRunListResponse(BaseModel):
@@ -201,19 +200,3 @@ async def update_finetune_run(run_id: int, data: FineTuneRunUpdate, session: Asy
         completed_at=run.completed_at,
         created_at=run.created_at,
     )
-
-
-@router.patch("/{run_id}", response_model=FineTuneRunResponse)
-async def update_finetune_run(run_id: int, data: FineTuneRunUpdate, session: AsyncSession = Depends(get_session)):
-    result = await session.execute(select(FineTuneRun).where(FineTuneRun.id == run_id))
-    run = result.scalar_one_or_none()
-    if not run:
-        raise HTTPException(status_code=404, detail="Fine-tune run not found")
-
-    update_data = data.model_dump(exclude_unset=True)
-    for field, value in update_data.items():
-        setattr(run, field, value)
-
-    await session.flush()
-    await session.refresh(run)
-    return FineTuneRunResponse(**run.__dict__, config=json.loads(run.config))
