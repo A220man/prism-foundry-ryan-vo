@@ -15,7 +15,9 @@ async def initialize_db():
 
 @pytest.fixture
 async def client():
-    async with AsyncClient(app=app, base_url="http://test") as ac:
+    from httpx import ASGITransport
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as ac:
         yield ac
 
 
@@ -51,7 +53,9 @@ async def test_oidc_login_not_configured(client):
 @pytest.mark.asyncio
 async def test_oidc_callback_invalid_state(client):
     # First request to set up session with state
-    async with AsyncClient(app=app, base_url="http://test") as ac:
+    from httpx import ASGITransport
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as ac:
         await ac.get("/api/v1/auth/login")
         # Now test invalid state
         resp = await ac.get("/api/v1/auth/callback?code=test&state=wrong")
