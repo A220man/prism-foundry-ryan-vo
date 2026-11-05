@@ -5,7 +5,9 @@ from typing import Optional
 from datetime import datetime
 from app.core.database import get_session
 from app.models import MarketData
+from app.services.market_data_ingestion import fetch_and_store_ohlcv, fetch_latest_price
 from pydantic import BaseModel, Field, ConfigDict
+
 
 router = APIRouter()
 
@@ -105,3 +107,44 @@ async def get_market_data(data_id: int, session: AsyncSession = Depends(get_sess
     if not md:
         raise HTTPException(status_code=404, detail="Market data not found")
     return MarketDataResponse.model_validate(md)
+class IngestRequest(BaseModel):
+    symbol: str = Field(..., min_length=1, max_length=32)
+    period: str = Field(default="1mo", pattern="^(1d|5d|1mo|3mo|6mo|1y|2y|5y|10y|ytd|max)$")
+    interval: str = Field(default="1d", pattern="^(1m|2m|5m|15m|30m|60m|90m|1h|1d|5d|1wk|1mo|3mo)$")
+    source: str = Field(default="yfinance", max_length=64)
+
+
+class IngestResponse(BaseModel):
+    symbol: str
+    period: str
+    interval: str
+    records_created: int
+    records: list[MarketDataResponse]
+
+
+@router.post("/ingest", response_model=IngestResponse)
+async def ingest_market_data(data: IngestRequest, session: AsyncSession = Depends(get_session)):
+    """Fetch OHLCV data from external source and store in database."""
+    records = await fetch_and_store_ohlcv(
+        session=session,
+        symbol=data.symbol,
+        period=data.period,
+        interval=data.interval,
+        source=data.source,
+    )
+    return IngestResponse(
+        symbol=data.symbol.upper(),
+        period=data.period,
+        interval=data.interval,
+        records_created=len(records),
+        records=[MarketDataResponse.model_validate(r) for r in records],
+    )
+
+
+@router.post("/ingest/latest", response_model=MarketDataResponse)
+async def ingest_latest_price(symbol: str = Query(..., min_length=1, max_length=32), source: str = Query(default="yfinance", max_length=64), session: AsyncSession = Depends(get_session)):
+    """Fetch and store the latest price for a symbol."""
+    record = await fetch_latest_price(session=session, symbol=symbol, source=source)
+    if not record:
+        raise HTTPException(status_code=404, detail=f"No data found for symbol {symbol}")
+    return MarketDataResponse.model_validate(record)
