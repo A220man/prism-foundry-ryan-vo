@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "current_feature": "core-skeleton",
+  "current_feature": "market-data-ingestion",
   "features": [
     {
       "id": "core-skeleton",
@@ -61,14 +61,19 @@
     {
       "id": "market-data-ingestion",
       "title": "Market data ingestion and storage",
-      "status": "planned",
+      "status": "in_progress",
       "acceptance": [
         "API to fetch/store OHLCV data from configurable sources",
         "SQLite persistence with parameterized queries",
         "Pagination and filtering on historical data endpoints"
       ],
-      "implementation": [],
-      "tests": []
+      "implementation": [
+        "backend/app/services/market_data_ingestion.py",
+        "backend/app/api/market_data.py"
+      ],
+      "tests": [
+        "backend/tests/test_market_data_ingestion.py"
+      ]
     },
     {
       "id": "tokenizer-service",

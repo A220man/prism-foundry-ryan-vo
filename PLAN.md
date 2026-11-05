@@ -4,7 +4,7 @@ Each round completes one feature or repair. Future items are planned, not implem
 
 ## Current round
 
-core-skeleton
+market-data-ingestion
 
 ## Roadmap
 
@@ -24,12 +24,16 @@ Tests: `backend/tests/test_health.py`, `backend/tests/test_market_data.py`, `bac
 
 ### market-data-ingestion — Market data ingestion and storage
 
-Status: planned
+Status: in_progress
 
 Acceptance:
 - API to fetch/store OHLCV data from configurable sources
 - SQLite persistence with parameterized queries
 - Pagination and filtering on historical data endpoints
+
+Implementation: `backend/app/services/market_data_ingestion.py`, `backend/app/api/market_data.py`
+
+Tests: `backend/tests/test_market_data_ingestion.py`
 
 ### tokenizer-service — Kronos tokenizer service (offline core)
 
