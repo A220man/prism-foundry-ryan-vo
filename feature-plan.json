@@ -61,7 +61,7 @@
     {
       "id": "market-data-ingestion",
       "title": "Market data ingestion and storage",
-      "status": "in_progress",
+    "status": "done",
       "acceptance": [
         "API to fetch/store OHLCV data from configurable sources",
         "SQLite persistence with parameterized queries",
