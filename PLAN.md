@@ -24,7 +24,7 @@ Tests: `backend/tests/test_health.py`, `backend/tests/test_market_data.py`, `bac
 
 ### market-data-ingestion — Market data ingestion and storage
 
-Status: in_progress
+Status: done
 
 Acceptance:
 - API to fetch/store OHLCV data from configurable sources

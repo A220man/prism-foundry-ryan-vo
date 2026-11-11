@@ -1,5 +1,24 @@
 # Changelog
 
+## 1.5.0 — work-in-progress checkpoint
+
+Partial code published for continued development. Known issues: STATUS.md.
+
+## 1.4.0 — 2026-11-11
+
+### Added
+- Market data ingestion service with yfinance integration (`backend/app/services/market_data_ingestion.py`)
+- Ingest OHLCV data via POST `/api/v1/market-data/ingest` with configurable period/interval/source
+- Ingest latest price via POST `/api/v1/market-data/ingest/latest`
+- SQLite persistence with deduplication (upsert by symbol+timestamp)
+- Tests for ingestion endpoints with mocked yfinance (`backend/tests/test_market_data_ingestion.py`)
+
+### Fixed
+- Created `backend/data` directory for SQLite database file
+- All 24 backend tests pass (health, market_data, market_data_ingestion, predictions, finetune, auth)
+- All 9 frontend tests pass (Dashboard, MarketData, Predictions)
+- Backend health endpoint verified: `/health` returns healthy status
+
 ## 1.4.0 — work-in-progress checkpoint
 
 Partial code published for continued development. Known issues: STATUS.md.
