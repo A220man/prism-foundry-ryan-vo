@@ -3,6 +3,7 @@ from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sess
 from sqlalchemy.pool import NullPool
 from app.core.config import settings
 from app.models import Base
+import os
 
 
 engine = create_async_engine(
@@ -16,6 +17,12 @@ async_session_maker = async_sessionmaker(engine, class_=AsyncSession, expire_on_
 
 
 async def init_db() -> None:
+    # Ensure data directory exists for SQLite
+    db_path = settings.DATABASE_URL
+    if db_path.startswith("sqlite+aiosqlite:///"):
+        dir_path = db_path[len("sqlite+aiosqlite:///"):].split(/, 1)[0]
+        if dir_path:
+            os.makedirs(dir_path, exist_ok=True)
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
