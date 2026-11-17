@@ -4,7 +4,7 @@ from fastapi.responses import JSONResponse
 from starlette.middleware.sessions import SessionMiddleware
 from app.core.config import settings
 from app.core.database import lifespan
-from app.api import health, market_data, predictions, finetune, auth
+from app.api import health, market_data, predictions, finetune, auth, tokenizer
 import logging
 
 logging.basicConfig(level=logging.INFO)
@@ -55,6 +55,7 @@ def create_app() -> FastAPI:
     app.include_router(predictions.router, prefix="/api/v1/predictions", tags=["predictions"])
     app.include_router(finetune.router, prefix="/api/v1/finetune", tags=["finetune"])
     app.include_router(auth.router, prefix="/api/v1/auth", tags=["auth"])
+    app.include_router(tokenizer.router, prefix="/api/v1/tokenizer", tags=["tokenizer"])
 
     return app
 
