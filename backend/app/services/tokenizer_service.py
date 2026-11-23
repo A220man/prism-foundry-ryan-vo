@@ -12,18 +12,25 @@ def tokenize_price_sequence(prices: List[float], scale: int = 1000) -> List[int]
     prices : List[float]
         Sequence of price values (e.g., open, high, low, close).
     scale : int, optional
-        Multiplier for quantizing floats to integers (default 1000).
+        Multiplier for quantizing floats to integers (default 1000). Must be positive.
 
     Returns
     -------
     List[int]
         Integer tokens derived deterministically from the input prices.
 
+    Raises
+    ------
+    ValueError
+        If scale is not positive or if prices contain NaN/Inf values.
+
     Notes
     -----
     This tokenizer is deterministic: identical prices input always yields the same token list.
     It works offline and does not require any external API keys.
     """
+    if scale <= 0:
+        raise ValueError(f"scale must be positive, got {scale}")
     return [int(round(price * scale)) for price in prices]
 
 class TokenizerService:
