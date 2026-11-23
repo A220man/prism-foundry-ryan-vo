@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "prism-foundry-ryan-vo"
-version = "1.6.0"
+version = "1.7.0"
 description = "Kronos: A Foundation Model for the Language of Financial Markets"
 readme = "README.md"
 authors = [{name = "Ryan Vo", email = "ryandtvo@gmail.com"}]
