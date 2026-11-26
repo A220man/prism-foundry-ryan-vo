@@ -61,7 +61,7 @@
     {
       "id": "market-data-ingestion",
       "title": "Market data ingestion and storage",
-    "status": "done",
+      "status": "done",
       "acceptance": [
         "API to fetch/store OHLCV data from configurable sources",
         "SQLite persistence with parameterized queries",
@@ -78,14 +78,19 @@
     {
       "id": "tokenizer-service",
       "title": "Kronos tokenizer service (offline core)",
-      "status": "planned",
+      "status": "done",
       "acceptance": [
         "Deterministic tokenization of price sequences",
         "Works without LLM API keys",
         "Unit tests for boundary cases"
       ],
-      "implementation": [],
-      "tests": []
+      "implementation": [
+        "backend/app/services/tokenizer_service.py",
+        "backend/app/api/tokenizer.py"
+      ],
+      "tests": [
+        "backend/tests/test_tokenizer_service.py"
+      ]
     },
     {
       "id": "prediction-engine",

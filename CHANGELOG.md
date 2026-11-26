@@ -1,6 +1,16 @@
 # Changelog
 
+## 1.8.0 — work-in-progress checkpoint
+
+Partial code published for continued development. Known issues: STATUS.md.
+
 ## 1.7.0 — work-in-progress checkpoint
+
+### tokenizer-service
+
+- Improved NaN/Inf validation in `tokenize_price_sequence()`, adding explicit `ValueError` raises matching documented behavior
+- All 6 unit tests pass
+- API endpoint `/api/v1/tokenizer/tokenize` works correctly
 
 Partial code published for continued development. Known issues: STATUS.md.
 
