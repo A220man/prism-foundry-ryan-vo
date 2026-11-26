@@ -20,7 +20,7 @@ async def init_db() -> None:
     # Ensure data directory exists for SQLite
     db_path = settings.DATABASE_URL
     if db_path.startswith("sqlite+aiosqlite:///"):
-        dir_path = db_path[len("sqlite+aiosqlite:///"):].split(/, 1)[0]
+        dir_path = db_path.split(":///")[1].split(",", 1)[0]
         if dir_path:
             os.makedirs(dir_path, exist_ok=True)
     async with engine.begin() as conn:

@@ -31,6 +31,11 @@ def tokenize_price_sequence(prices: List[float], scale: int = 1000) -> List[int]
     """
     if scale <= 0:
         raise ValueError(f"scale must be positive, got {scale}")
+    for price in prices:
+        if price != price:  # NaN check (NaN != NaN is True)
+            raise ValueError(f"price contains NaN: {price}")
+        if price == float('inf') or price == float('-inf'):
+            raise ValueError(f"price contains infinity: {price}")
     return [int(round(price * scale)) for price in prices]
 
 class TokenizerService:

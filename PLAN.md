@@ -37,12 +37,16 @@ Tests: `backend/tests/test_market_data_ingestion.py`
 
 ### tokenizer-service — Kronos tokenizer service (offline core)
 
-Status: planned
+Status: done
 
 Acceptance:
 - Deterministic tokenization of price sequences
 - Works without LLM API keys
 - Unit tests for boundary cases
+
+Implementation: `backend/app/services/tokenizer_service.py`, `backend/app/api/tokenizer.py`
+
+Tests: `backend/tests/test_tokenizer_service.py`
 
 ### prediction-engine — Prediction engine with evaluation metrics
 
